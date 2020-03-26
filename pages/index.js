@@ -1,4 +1,3 @@
-import Head from 'next/head'
 
 const get = async () => {
   console.log(await fetch('/api/get'))
