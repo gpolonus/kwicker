@@ -1,0 +1,18 @@
+{
+  "name": "kwicker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "next": "^9.3.1",
+    "now": "^17.1.1"
+  }
+}
