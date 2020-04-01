@@ -12,7 +12,7 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "next": "^9.3.1",
+    "next": "^9.3.2",
     "now": "^17.1.1"
   }
 }
