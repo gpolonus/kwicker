@@ -11,3 +11,8 @@ export function mergeKey(object, id, props = {}) {
   }
 }
 
+export const swapListItem = (list, item, property = 'id') => list.map(i => i[property] === item[property] ? item : i)
+
+export const filterOut = (list, item, property = 'id') => list.filter(i => i[property] !== item[property])
+
+export const posmod = (n, p) => ((n % p) + p) % p

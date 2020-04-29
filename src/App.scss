@@ -1,23 +1,29 @@
 
 .App {
-  text-align: center;
+  display: flex;
+  justify-content: space-around;
 
-  .willdo {
-    padding: 5px;
+  .column {
+    text-align: center;
 
-    .czechbox {
-      padding-left: 5px;
-      cursor: pointer;
-    }
-
-    .contents {
-      padding: 5px;
+    .item {
+      border: 1px solid transparent;
 
       &.focused {
-        border: 2px solid black;
+        border: 1px solid blue;
       }
     }
   }
+
+  .control {
+    margin: 5px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.8rem;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+      color: black;
+    }
+  }
 }
-
-
