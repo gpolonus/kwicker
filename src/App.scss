@@ -1,0 +1,23 @@
+
+.App {
+  text-align: center;
+
+  .willdo {
+    padding: 5px;
+
+    .czechbox {
+      padding-left: 5px;
+      cursor: pointer;
+    }
+
+    .contents {
+      padding: 5px;
+
+      &.focused {
+        border: 2px solid black;
+      }
+    }
+  }
+}
+
+
