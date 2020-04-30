@@ -17,7 +17,7 @@
     "start:scss": "node-sass-chokidar ./src -o ./src --watch",
     "build:scss": "node-sass-chokidar ./src -o ./build",
     "build:react": "react-scripts build",
-    "build": "build:scss && build:react"
+    "build": "npm run build:scss && npm run build:react"
   },
   "eslintConfig": {
     "extends": "react-app"
