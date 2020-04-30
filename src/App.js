@@ -106,7 +106,7 @@ function App() {
 
     // TODO: match up the indexes if its too big for a column
     if(state[type]) {
-      if()
+      // if()
       setFocus({ index, type })
     } else {
       setFocus({})
