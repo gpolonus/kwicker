@@ -15,7 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:scss": "node-sass-chokidar ./src -o ./src --watch",
-    "build:scss": "node-sass-chokidar ./src -o ./build",
+    "build:scss": "node-sass-chokidar ./src -o ./src",
     "build:react": "react-scripts build",
     "build": "npm run build:scss && npm run build:react"
   },
