@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { swapListItem, filterOut, posmod as mod } from './utils'
+import { swapListItem, filterOut, posmod as mod, insert } from './utils'
 import { v4 as uuid } from 'uuid'
 import Mousetrap from 'mousetrap'
 
@@ -37,16 +37,16 @@ const initialState = getInitialState()
 function App() {
   const [ state, setState ] = useState(initialState)
   const [ focus, setFocus ] = useState({})
-  console.log(focus)
   useEffect(() => {
-    Mousetrap.bind('up', () => setNewFocus(-1, 0))
-    Mousetrap.bind('down', () => setNewFocus(1, 0))
-    Mousetrap.bind('left', () => setNewFocus(0, -1))
-    Mousetrap.bind('right', () => setNewFocus(0, 1))
-    Mousetrap.bind('ctrl+up', () => {})
-    Mousetrap.bind('ctrl+down', () => {})
-    Mousetrap.bind('ctrl+left', () => {})
-    Mousetrap.bind('ctrl+right', () => {})
+    Mousetrap.bind('up', setNewFocus(-1, 0))
+    Mousetrap.bind('down', setNewFocus(1, 0))
+    Mousetrap.bind('left', setNewFocus(0, -1))
+    Mousetrap.bind('right', setNewFocus(0, 1))
+    // Mousetrap.bind('ctrl+up', focusMove(0, 0))
+    // Mousetrap.bind('ctrl+down', focusMove(0, 0))
+    Mousetrap.bind('ctrl+left', focusMove(0, -1))
+    Mousetrap.bind('ctrl+right', focusMove(0, 1))
+    Mousetrap.bind('e', () => setEditFocus())
   })
 
   localStorage.setItem('state', JSON.stringify(state))
@@ -75,17 +75,23 @@ function App() {
     [TYPES.next]: nexts || state[TYPES.next]
   })
 
-  const setNewFocus = (vert, horz) => {
+  const setPartialStateByType = newState => setState({
+    [TYPES.done]: newState[TYPES.done] || state[TYPES.done],
+    [TYPES.now]: newState[TYPES.now] || state[TYPES.now],
+    [TYPES.next]: newState[TYPES.next] || state[TYPES.next]
+})
+
+  const setNewFocus = (vert, horz) => () => {
     let { index, type } = focus
     switch(horz) {
       case -1:
-        type = type !== undefined ? mod(type - 1, 3) : TYPES.done
+        type = type !== undefined ? mod(type - 1, 3) : TYPES.next
         break
       case 0:
         type = type !== undefined ? type : TYPES.now
         break
       case 1:
-        type = type !== undefined ? mod(type + 1, 3) : TYPES.next
+        type = type !== undefined ? mod(type + 1, 3) : TYPES.done
         break
       default:
     }
@@ -106,10 +112,46 @@ function App() {
 
     // TODO: match up the indexes if its too big for a column
     if(state[type]) {
-      // if()
-      setFocus({ index, type })
+      if(state[type][index]) {
+        setFocus({ index, type })
+      } else {
+        setFocus({ index: length - 1, type })
+      }
     } else {
       setFocus({})
+    }
+  }
+
+  const focusMove = (vert, horz) => () => {
+    console.log('focusmOve', vert, horz)
+    const { type, index } = focus
+    if (type === undefined || index === undefined) return
+
+    const item = state[type][index]
+    if(!item) return
+
+    const newType = mod(type + horz, 3)
+    // TODO: newIndex
+    // let newIndex = index + vert > state[newType].length - 1 ? state[newType].length : index + vert
+    let newIndex = index
+    if(type !== newType) {
+      setPartialStateByType({
+        [type]: filterOut(state[type], item),
+        [newType]: insert(state[newType], item, newIndex)
+      })
+    } else {
+      setPartialStateByType({
+
+      })
+    }
+  }
+
+  const setEditFocus = () => {
+    const { type, index, editing } = focus
+    if(type === TYPES.next) {
+      setFocus({ type, index, editing: !editing })
+    } else {
+      setFocus({ type, index, editing: false })
     }
   }
 
@@ -185,6 +227,14 @@ function App() {
     }
   }
 
+  const canAdd = () => !nexts.some(next => next.content === '')
+
+  const handleEdit = index => el => el && isFocused(index, TYPES.next) &&
+    (focus.editing
+      ? el.focus()
+      : el.blur()
+    )
+
   return (
     <div className='App'>
       <div className='column'>
@@ -221,12 +271,13 @@ function App() {
               <input
                 value={item.content}
                 onChange={({ target: { value } }) => editNext(item.id, value)}
+                ref={handleEdit(index)}
               />
             </div>
             <span className='control' onClick={remove(item, TYPES.next)}>Remove</span>
           </div>
         )}
-        <button onClick={addNext}>Add</button>
+        <button onClick={addNext} disabled={!canAdd()}>Add</button>
       </div>
     </div>
   );

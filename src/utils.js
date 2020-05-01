@@ -16,3 +16,9 @@ export const swapListItem = (list, item, property = 'id') => list.map(i => i[pro
 export const filterOut = (list, item, property = 'id') => list.filter(i => i[property] !== item[property])
 
 export const posmod = (n, p) => ((n % p) + p) % p
+
+export const insert = (list, item, index) => [
+  ...list.slice(0, index),
+  item,
+  ...list.slice(index)
+]

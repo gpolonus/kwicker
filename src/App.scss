@@ -8,6 +8,13 @@
 
     .item {
       border: 1px solid transparent;
+      border-radius: 5px;
+      padding: 5px;
+      margin: 5px;
+
+      input {
+        width: 150px;
+      }
 
       &.focused {
         border: 1px solid blue;
